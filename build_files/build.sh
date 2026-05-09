@@ -25,9 +25,9 @@ dnf5 install -y \
 #
 # coolercontrol
 #
-dnf5 install dnf-plugins-core
+dnf5 install -y dnf-plugins-core
 dnf5 copr enable codifryed/CoolerControl
-sudo dnf install coolercontrol liquidctl
+dnf5 install -y coolercontrol liquidctl
 
 
 #### Example for enabling a System Unit File
