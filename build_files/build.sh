@@ -22,15 +22,6 @@ dnf5 install -y \
 # Disable COPRs so they don't end up enabled on the final image:
 # dnf5 -y copr disable ublue-os/staging
 
-#
-# coolercontrol
-#
-dnf5 install -y dnf-plugins-core
-dnf5 copr enable -y codifryed/CoolerControl
-dnf5 install -y coolercontrol liquidctl
-
-
 #### Example for enabling a System Unit File
 
 systemctl enable podman.socket
-systemctl enable --now coolercontrold
