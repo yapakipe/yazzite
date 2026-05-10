@@ -2,8 +2,21 @@
 
 set -ouex pipefail
 
-MAJOR_VERSION_NUMBER="$(sh -c '. /usr/lib/os-release ; echo $VERSION_ID')"
+#
+### Get and display version
+#
+
+MAJOR_VERSION_NUMBER=$(echo_major_version_number)
 echo "MAJOR_VERSION_NUMBER: $MAJOR_VERSION_NUMBER"
+
+echo_major_version_number() {
+    local major_version_number="$(sh -c '. /usr/lib/os-release ; echo $VERSION_ID')"
+    echo $major_version_number
+}
+
+#
+### Functions
+#
 
 install_packages() {
     local repo_name=$1
@@ -47,7 +60,7 @@ install_fedora_packages() {
 
 enable_terra_repo() {
     echo "Enabling the Terra repo..."
-    dnf5 -y install --nogpgcheck --repofrompath \'"terra,https://repos.fyralabs.com/terra$MAJOR_VERSION_NUMBER"\' terra-release
+    dnf5 -y install --nogpgcheck --repofrompath terra,https://repos.fyralabs.com/terra$MAJOR_VERSION_NUMBER terra-release
 }
 
 install_terra_packages() {
@@ -58,7 +71,9 @@ install_terra_packages() {
     install_packages_and_services "Terra" terra_packages terra_services
 }
 
+#
 ### Install packages
+#
 
 # Packages can be installed from any enabled yum repo on the image.
 # RPMfusion repos are available by default in ublue main images
