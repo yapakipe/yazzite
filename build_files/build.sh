@@ -43,18 +43,12 @@ fedora_services=("podman.socket")
 enable_services "Fedora" fedora_services
 
 #
-# Install Terra packages
+# Enable Terra repo and install packages
 #
 
-terra_repo_path="/etc/yum.repos.d/terra.repo"
-if ( ! grep -q "enabled=0" "$terra_repo_path" ); then  # if not matches found
-    echo 'Terra Repository is already enabled, skipping.'
-else
-    echo 'Enabling Terra Repository.'
-    sudo sed -i 's@enabled=0@enabled=1@g' "$terra_repo_path"
-fi
+dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
 
-terra_packages=("coolercontrol" "liquidctl")
+terra_packages=("terra-release" "coolercontrol" "liquidctl")
 install_packages "Terra" terra_packages
 
 terra_services=("coolercontrold")
