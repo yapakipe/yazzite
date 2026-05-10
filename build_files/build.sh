@@ -93,6 +93,8 @@ dnf5 repo info
 echo
 ls -l /etc/yum.repos.d/
 echo
+cat /etc/yum.repos.d/terra.repo
+echo
 
 #
 # Install packages
