@@ -33,6 +33,18 @@ enable_services() {
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/43/x86_64/repoview/index.html&protocol=https&redirect=1
 
 #
+# List available repos - helps figuring out why things don't work during a build...
+#
+
+echo
+echo Repos short list:
+dnf5 repo list
+echo
+echo Repos details:
+dnf5 repo info
+echo
+
+#
 # Install Fedora packages
 #
 
