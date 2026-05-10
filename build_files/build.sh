@@ -2,6 +2,8 @@
 
 set -ouex pipefail
 
+MAJOR_VERSION_NUMBER="$(sh -c '. /usr/lib/os-release ; echo $VERSION_ID')"
+echo "MAJOR_VERSION_NUMBER: $MAJOR_VERSION_NUMBER"
 
 install_packages() {
     local repo_name=$1
@@ -58,7 +60,7 @@ enable_services "Fedora" fedora_services
 # Enable Terra repo and install packages
 #
 
-dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
+dnf5 -y install --nogpgcheck --repofrompath "terra,https://repos.fyralabs.com/terra$MAJOR_VERSION_NUMBER" terra-release
 
 terra_packages=("terra-release" "coolercontrol" "liquidctl")
 install_packages "Terra" terra_packages
