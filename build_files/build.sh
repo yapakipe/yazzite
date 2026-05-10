@@ -91,6 +91,8 @@ echo
 echo Repos details:
 dnf5 repo info
 echo
+ls -l /etc/yum.repos.d/
+echo
 
 #
 # Install packages
