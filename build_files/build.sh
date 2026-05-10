@@ -27,6 +27,37 @@ enable_services() {
     done
 }
 
+install_packages_and_services() {
+    local repo_name=$1
+    local packages=$2[@]
+    local services=$3[@]
+
+    local packages_array=("${!packages}")
+    local services_array=("${!services}")
+
+    install_packages $repo_name packages_array
+    enable_services $repo_name services_array
+}
+
+install_fedora_packages() {
+    local fedora_packages=("gparted" "blivet-gui")
+    local fedora_services=("podman.socket")
+    install_packages_and_services "Fedora" fedora_packages fedora_services
+}
+
+enable_terra_repo() {
+    echo "Enabling the Terra repo..."
+    dnf5 -y install --nogpgcheck --repofrompath "terra,https://repos.fyralabs.com/terra$MAJOR_VERSION_NUMBER" terra-release
+}
+
+install_terra_packages() {
+    enable_terra_repo
+
+    local terra_packages=("terra-release" "coolercontrol" "liquidctl")
+    local terra_services=("coolercontrold")
+    install_packages_and_services "Terra" terra_packages terra_services
+}
+
 ### Install packages
 
 # Packages can be installed from any enabled yum repo on the image.
@@ -47,26 +78,11 @@ dnf5 repo info
 echo
 
 #
-# Install Fedora packages
+# Install packages
 #
 
-fedora_packages=("gparted" "blivet-gui")
-install_packages "Fedora" fedora_packages
-
-fedora_services=("podman.socket")
-enable_services "Fedora" fedora_services
-
-#
-# Enable Terra repo and install packages
-#
-
-dnf5 -y install --nogpgcheck --repofrompath "terra,https://repos.fyralabs.com/terra$MAJOR_VERSION_NUMBER" terra-release
-
-terra_packages=("terra-release" "coolercontrol" "liquidctl")
-install_packages "Terra" terra_packages
-
-terra_services=("coolercontrold")
-enable_services "Terra" terra_services
+install_fedora_packages
+install_terra_packages
 
 #
 # Use a COPR Example:
