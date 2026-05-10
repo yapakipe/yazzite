@@ -12,9 +12,8 @@ set -ouex pipefail
 # this installs a package from fedora repos
 dnf5 install -y \
     gparted \
-    blivet-gui \
-    coolercontrol \
-    liquidctl
+    blivet-gui
+
 
 # Use a COPR Example:
 #
@@ -22,6 +21,15 @@ dnf5 install -y \
 # dnf5 -y install package
 # Disable COPRs so they don't end up enabled on the final image:
 # dnf5 -y copr disable ublue-os/staging
+
+#
+# coolercontrol (COPR)
+#
+
+dnf5 -y copr enable codifryed/CoolerControl
+dnf5 -y install coolercontrol liquidctl
+# Disable COPRs so they don't end up enabled on the final image:
+dnf5 -y copr disable codifryed/CoolerControl
 
 #### Example for enabling a System Unit File
 
