@@ -22,15 +22,28 @@ dnf5 install -y \
 # Disable COPRs so they don't end up enabled on the final image:
 # dnf5 -y copr disable ublue-os/staging
 
-#
-# coolercontrol (COPR)
-#
-
-dnf5 -y copr enable codifryed/CoolerControl
-dnf5 -y install coolercontrol liquidctl
-# Disable COPRs so they don't end up enabled on the final image:
-dnf5 -y copr disable codifryed/CoolerControl
-
 #### Example for enabling a System Unit File
 
 systemctl enable podman.socket
+
+#
+# Terra packages
+#
+
+terra_repo_path="/etc/yum.repos.d/terra.repo"
+if ( ! grep -q "enabled=0" "$terra_repo_path" ); then  # if not matches found
+    echo 'Terra Repository is already enabled, skipping.'
+else
+    echo 'Enabling Terra Repository.'
+    sudo sed -i 's@enabled=0@enabled=1@g' "$terra_repo_path"
+fi
+
+terra_packages=("coolercontrol" "liquidctl")
+echo "Installing: ${packages[*]}"
+dnf5 -y install ${packages[*]}
+
+terra_services=("coolercontrold")
+echo "Enabling services: ${terra_services[*]}"
+for service in ${terra_services[@]}; do
+    systemctl enable "$service"
+done
