@@ -6,13 +6,13 @@ set -ouex pipefail
 ### Get and display version
 #
 
-MAJOR_VERSION_NUMBER=$(echo_major_version_number)
-echo "MAJOR_VERSION_NUMBER: $MAJOR_VERSION_NUMBER"
-
 echo_major_version_number() {
     local major_version_number="$(sh -c '. /usr/lib/os-release ; echo $VERSION_ID')"
     echo $major_version_number
 }
+
+MAJOR_VERSION_NUMBER=$(echo_major_version_number)
+echo "MAJOR_VERSION_NUMBER: $MAJOR_VERSION_NUMBER"
 
 #
 ### Functions
