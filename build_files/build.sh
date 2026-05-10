@@ -47,7 +47,7 @@ install_fedora_packages() {
 
 enable_terra_repo() {
     echo "Enabling the Terra repo..."
-    dnf5 -y install --nogpgcheck --repofrompath "terra,https://repos.fyralabs.com/terra$MAJOR_VERSION_NUMBER" terra-release
+    dnf5 -y install --nogpgcheck --repofrompath \'"terra,https://repos.fyralabs.com/terra$MAJOR_VERSION_NUMBER"\' terra-release
 }
 
 install_terra_packages() {
