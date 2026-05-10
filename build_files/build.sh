@@ -28,6 +28,16 @@ install_packages() {
     dnf5 -y install ${packages_array[*]}
 }
 
+install_packages_enable_repo() {
+    local repo_name=$1
+    local packages=$2[@]
+
+    local packages_array=("${!packages}")
+
+    echo "Installing packages from $repo_name repos: ${packages_array[*]}"
+    dnf5 --enable-repo=$repo_name -y install ${packages_array[*]}
+}
+
 enable_services() {
     local repo_name=$1
     local services=$2[@]
@@ -55,20 +65,14 @@ install_packages_and_services() {
 install_fedora_packages() {
     local fedora_packages=("gparted" "blivet-gui")
     local fedora_services=("podman.socket")
-    install_packages_and_services "Fedora" fedora_packages fedora_services
-}
-
-enable_terra_repo() {
-    echo "Enabling the Terra repo..."
-    dnf5 -y install --nogpgcheck --repofrompath terra,https://repos.fyralabs.com/terra$MAJOR_VERSION_NUMBER terra-release
+    install_packages_and_services "fedora" fedora_packages fedora_services
 }
 
 install_terra_packages() {
-    enable_terra_repo
-
     local terra_packages=("terra-release" "coolercontrol" "liquidctl")
     local terra_services=("coolercontrold")
-    install_packages_and_services "Terra" terra_packages terra_services
+    install_packages_enable_repo "terra" terra_packages
+    enable_services "terra" terra_services
 }
 
 #
@@ -92,8 +96,6 @@ echo Repos details:
 dnf5 repo info
 echo
 ls -l /etc/yum.repos.d/
-echo
-cat /etc/yum.repos.d/terra.repo
 echo
 
 #
