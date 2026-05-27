@@ -63,7 +63,7 @@ install_packages_and_services() {
 }
 
 install_fedora_packages() {
-    local fedora_packages=("gparted" "blivet-gui")
+    local fedora_packages=("gparted" "blivet-gui")   
     local fedora_services=("podman.socket")
     install_packages_and_services "fedora" fedora_packages fedora_services
 }
@@ -74,6 +74,17 @@ install_terra_packages() {
     install_packages_enable_repo "terra" terra_packages
     enable_services "terra" terra_services
 }
+
+install_docker_packages() {
+
+    dnf5 config-manager addrepo --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo
+    
+    local packages=("docker-ce", "docker-ce-cli", "docker-compose-plugin", "docker-buildx-plugin", "containerd.io")
+    local services=("docker.service", "docker.socket")
+
+    install_packages_and_services "docker" packages services
+}
+
 
 #
 ### Install packages
@@ -104,6 +115,7 @@ echo
 
 install_fedora_packages
 install_terra_packages
+install_docker_packages
 
 #
 # Use a COPR Example:
