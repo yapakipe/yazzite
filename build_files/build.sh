@@ -78,8 +78,10 @@ install_terra_packages() {
 install_docker_packages() {
     # Code copied from bazzite-dx's 20-install-apps.sh
 
+    local docker_repo="docker-ce-stable"
+
     dnf5 config-manager addrepo --from-repofile="https://download.docker.com/linux/fedora/docker-ce.repo"
-    dnf5 config-manager setopt docker-ce-stable.enabled=0
+    dnf5 config-manager setopt ${docker_repo}.enabled=0
 
     local docker_packages=(
         containerd.io
@@ -88,10 +90,10 @@ install_docker_packages() {
         docker-ce-cli
         docker-compose-plugin
     )
-    install_packages_enable_repo "docker-ce-stable" docker_packages
+    install_packages_enable_repo "${docker_repo}" docker_packages
 
-    # local docker_services=("docker.service", "docker.socket")
-    # enable_services "docker-ce-stable" docker_services
+    local docker_services=("docker.socket")
+    enable_services "${docker_repo}" docker_services
 }
 
 
