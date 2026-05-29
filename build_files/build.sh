@@ -79,6 +79,7 @@ install_docker_packages() {
 
     dnf5 config-manager addrepo --from-repofile="https://download.docker.com/linux/fedora/docker-ce.repo"
     dnf5 config-manager setopt docker-ce-stable.enabled=0
+    rpm --import https://download.docker.com/linux/fedora/gpg
 
     local docker_packages=("docker-ce", "docker-ce-cli", "docker-compose-plugin", "docker-buildx-plugin", "containerd.io")
     local docker_services=("docker.service", "docker.socket")
