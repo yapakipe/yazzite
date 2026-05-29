@@ -25,7 +25,7 @@ install_packages() {
     local packages_array=("${!packages}")
 
     echo "Installing packages from $repo_name repos: ${packages_array[*]}"
-    dnf5 -y install ${packages_array[*]}
+    dnf5 -y install "${packages_array[*]}" 
 }
 
 install_packages_enable_repo() {
