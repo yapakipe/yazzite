@@ -25,7 +25,7 @@ install_packages() {
     local packages_array=("${!packages}")
 
     echo "Installing packages from $repo_name repos: ${packages_array[*]}"
-    dnf5 -y install ${packages_array[*]} 
+    dnf5 -y install ${packages_array[*]}
 }
 
 install_packages_enable_repo() {
@@ -63,7 +63,7 @@ install_packages_and_services() {
 }
 
 install_fedora_packages() {
-    local fedora_packages=("gparted" "blivet-gui")   
+    local fedora_packages=("gparted" "blivet-gui")
     local fedora_services=("podman.socket")
     install_packages_and_services "fedora" fedora_packages fedora_services
 }
