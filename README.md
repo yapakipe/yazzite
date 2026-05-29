@@ -11,6 +11,7 @@ This image is meant to be bazzite plus:
 - blivet-gui
 - coolercontrol
 - liquidctl
+- Docker
 
 That's it for now.
 
