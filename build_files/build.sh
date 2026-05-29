@@ -77,12 +77,15 @@ install_terra_packages() {
 
 install_docker_packages() {
 
-    dnf5 config-manager addrepo --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo
-    
+    dnf5 config-manager addrepo --from-repofile="https://download.docker.com/linux/fedora/docker-ce.repo"
+    dnf5 config-manager setopt docker-ce-stable.enabled=0
+
     local docker_packages=("docker-ce", "docker-ce-cli", "docker-compose-plugin", "docker-buildx-plugin", "containerd.io")
     local docker_services=("docker.service", "docker.socket")
 
-    install_packages_and_services "docker" docker_packages docker_services
+
+    install_packages_enable_repo "docker-ce-stable" docker_packages
+    enable_services "docker-ce-stable" docker_services
 }
 
 
