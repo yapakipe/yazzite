@@ -25,7 +25,7 @@ install_packages() {
     local packages_array=("${!packages}")
 
     echo "Installing packages from $repo_name repos: ${packages_array[*]}"
-    dnf5 -y install "${packages_array[*]}" 
+    dnf5 -y install ${packages_array[*]} 
 }
 
 install_packages_enable_repo() {
@@ -76,41 +76,29 @@ install_terra_packages() {
 }
 
 install_docker_packages() {
+    # Code copied from bazzite-dx's 20-install-apps.sh
 
     dnf5 config-manager addrepo --from-repofile="https://download.docker.com/linux/fedora/docker-ce.repo"
     dnf5 config-manager setopt docker-ce-stable.enabled=0
-    # rpm --import https://download.docker.com/linux/fedora/gpg
 
-    #local docker_packages=("docker-ce", "docker-ce-cli", "docker-compose-plugin", "docker-buildx-plugin", "containerd.io")
-
-    local docker_packages=(
+    docker_pkgs=(
         containerd.io
         docker-buildx-plugin
         docker-celsb_release -sr
         docker-ce-cli
         docker-compose-plugin
     )
+    
+    dnf5 install -y --enable-repo="docker-ce-stable" "${docker_pkgs[@]}" || {
+        # Use test packages if docker pkgs is not available for f42
+        if (($(lsb_release -sr) == 42)); then
+            echo "::info::Missing docker packages in f42, falling back to test repos..."
+            dnf5 install -y --enablerepo="docker-ce-test" "${docker_pkgs[@]}"
+        fi
+    }
 
     local docker_services=("docker.service", "docker.socket")
-
-    install_packages_enable_repo "docker-ce-stable" docker_packages
     enable_services "docker-ce-stable" docker_services
-
-    # docker_pkgs=(
-    #     containerd.io
-    #     docker-buildx-plugin
-    #     docker-celsb_release -sr
-    #     docker-ce-cli
-    #     docker-compose-plugin
-    # )
-    
-    # dnf5 install -y --enable-repo="docker-ce-stable" "${docker_pkgs[@]}" || {
-    #     # Use test packages if docker pkgs is not available for f42
-    #     if (($(lsb_release -sr) == 42)); then
-    #         echo "::info::Missing docker packages in f42, falling back to test repos..."
-    #         dnf5 install -y --enablerepo="docker-ce-test" "${docker_pkgs[@]}"
-    #     fi
-    # }
 }
 
 
