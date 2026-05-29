@@ -84,7 +84,7 @@ install_docker_packages() {
     docker_pkgs=(
         containerd.io
         docker-buildx-plugin
-        docker-celsb_release -sr
+        docker-ce
         docker-ce-cli
         docker-compose-plugin
     )
