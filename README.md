@@ -12,6 +12,7 @@ This image is meant to be bazzite plus:
 - coolercontrol
 - liquidctl
 - Docker
+- android-file-transfer
 
 That's it for now.
 
