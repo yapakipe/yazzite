@@ -1,5 +1,5 @@
 export image_name := env("IMAGE_NAME", "yazzite") # output image name, usually same as repo name, change as needed
-export default_tag := env("DEFAULT_TAG", "latest")
+export default_tag := env("DEFAULT_TAG", "unstable45")
 export bib_image := env("BIB_IMAGE", "quay.io/centos-bootc/bootc-image-builder:latest")
 
 alias build-vm := build-qcow2
