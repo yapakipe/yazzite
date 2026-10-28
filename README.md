@@ -13,6 +13,8 @@ This image is meant to be bazzite plus:
 - liquidctl
 - Docker
 - android-file-transfer
+- clamav
+- clamav-freshclam
 
 That's it for now.
 
