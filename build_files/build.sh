@@ -96,6 +96,11 @@ install_docker_packages() {
     enable_services "${docker_repo}" docker_services
 }
 
+#
+# Copy the contents of system_files/ of the git repo to /
+#
+
+cp -avf "/ctx/system_files"/. /
 
 #
 ### Install packages
