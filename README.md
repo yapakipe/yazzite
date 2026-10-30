@@ -15,6 +15,7 @@ This image is meant to be bazzite plus:
 - android-file-transfer
 - clamav
 - clamav-freshclam
+- toolbox (which was removed in bazzite 45)
 
 That's it for now.
 
