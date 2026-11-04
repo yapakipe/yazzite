@@ -63,16 +63,9 @@ install_packages_and_services() {
 }
 
 install_fedora_packages() {
-    local fedora_packages=("gparted" "blivet-gui" "android-file-transfer" "clamav" "clamav-freshclam")
+    local fedora_packages=("gparted" "blivet-gui" "android-file-transfer" "clamav" "clamav-freshclam" "toolbox")
     local fedora_services=("podman.socket")
     install_packages_and_services "fedora" fedora_packages fedora_services
-}
-
-install_terra_packages() {
-    local terra_packages=("terra-release" "coolercontrol" "liquidctl")
-    local terra_services=("coolercontrold")
-    install_packages_enable_repo "terra" terra_packages
-    enable_services "terra" terra_services
 }
 
 install_docker_packages() {
@@ -96,6 +89,11 @@ install_docker_packages() {
     enable_services "${docker_repo}" docker_services
 }
 
+#
+# Copy the contents of system_files/ of the git repo to /
+#
+
+cp -avf "/ctx/system_files"/. /
 
 #
 ### Install packages
@@ -125,7 +123,6 @@ echo
 #
 
 install_fedora_packages
-install_terra_packages
 install_docker_packages
 
 #

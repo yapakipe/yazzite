@@ -6,7 +6,7 @@ This repository is meant to be a template for building your own custom [bootc](h
 
 If you have questions about this template after following the instructions, try the following spaces:
 - [Universal Blue Forums](https://universal-blue.discourse.group/)
-- [Universal Blue Discord](https://discord.gg/WEu6BdFEtp)
+- [Universal Blue Discord](https://discord.gg/8RZGC3uFzA)
 - [bootc discussion forums](https://github.com/bootc-dev/bootc/discussions) - This is not an Universal Blue managed space, but is an excellent resource if you run into issues with building bootc images.
 
 # How to Use
@@ -89,7 +89,7 @@ For a base image, you can choose any of the Universal Blue images or start from 
 - Aurora: `ghcr.io/ublue-os/aurora:stable`
 - Bluefin: `ghcr.io/ublue-os/bluefin:stable`
 - Universal Blue Base: `ghcr.io/ublue-os/base-main:latest`
-- Fedora: `quay.io/fedora/fedora-bootc:42`
+- Fedora: `quay.io/fedora/fedora-bootc:44`
 
 You can find more Universal Blue images on the [packages page](https://github.com/orgs/ublue-os/packages).
 </details>
@@ -102,11 +102,11 @@ This will show you all the info you need to know about your current image. The i
 
 ### Step 2c: Changing Names
 
-Change the first line in the [Justfile](./Justfile) to your image's name.
+Change the `IMAGE_NAME` and `REPO_ORGANIZATION` variable inside the `image-template.env`
 
 To commit and push all the files changed and added in step 2 into your Github repository:
 ```bash
-git add Containerfile Justfile cosign.pub
+git add Containerfile image-template.env cosign.pub
 git commit -m "Initial Setup"
 git push
 ```
@@ -132,7 +132,7 @@ The [build.sh](./build_files/build.sh) file is called from your Containerfile. I
 
 ## build.yml
 
-The [build.yml](./.github/workflows/build.yml) Github Actions workflow creates your custom OCI image and publishes it to the Github Container Registry (GHCR). By default, the image name will match the Github repository name. There are several environment variables at the start of the workflow which may be of interest to change.
+The [build.yml](./.github/workflows/build.yml) Github Actions workflow creates your custom OCI image and publishes it to the Github Container Registry (GHCR). By default, the image name will match the Github repository name.
 
 # Building Disk Images
 
@@ -168,16 +168,32 @@ This template comes with the necessary tooling to index your image on [artifacth
 
 # Justfile Documentation
 
-The `Justfile` contains various commands and configurations for building and managing container images and virtual machine images using Podman and other utilities.
-To use it, you must have installed [just](https://just.systems/man/en/introduction.html) from your package manager or manually. It is available by default on all Universal Blue images.
+The `Justfile` contains various commands and configurations for building and managing container images and virtual machine images using Podman and other utilities. It is also used inside Github Actions.
+
+## Required Utilities
+
+Container build:
+- [just](https://just.systems/man/en/introduction.html)
+- [podman](https://docs.podman.io/en/latest)
+- [jq](https://jqlang.org)
+
+These are usually preinstalled on Universal Blue's Bootc Images.
+
+Linting:
+- shfmt
+- shellcheck
 
 ## Environment Variables
+
+These are all sourced from the `image-template.env` file.
 
 - `image_name`: The name of the image (default: "image-template").
 - `default_tag`: The default tag for the image (default: "latest").
 - `bib_image`: The Bootc Image Builder (BIB) image (default: "quay.io/centos-bootc/bootc-image-builder:latest").
 
 ## Building The Image
+
+All these recipes will work (with default values) without supplying any arguments to them, e.g. `just build`
 
 ### `just build`
 
@@ -190,6 +206,44 @@ just build $target_image $tag
 Arguments:
 - `$target_image`: The tag you want to apply to the image (default: `$image_name`).
 - `$tag`: The tag for the image (default: `$default_tag`).
+
+### Rechunking
+We can flatten the layers of container images to make sure there isn't a single huge layer when your image gets published.
+This does not make your image faster to download, just provides better resumability.
+
+#### `just ostree-rechunk`
+Rechunks the existing Image with [rpm-ostree](https://coreos.github.io/rpm-ostree/build-chunked-oci/)
+
+```bash
+just ostree-rechunk $target_image $tag
+```
+
+#### `just rechunk`
+Rechunks the existing Image with [chunkah](https://github.com/coreos/chunkah), this is probably gonna be the default here at some point, try it out, it's cool.
+
+```bash
+just rechunk $target_image $tag
+```
+
+### Switching to the locally built image for testing
+
+The image has to be in the containers-storage owned by root, to be able to rebase to it, see the `_rootful_load_image` recipe.
+
+`sudo just build` and `sudo just ostree-rechunk` builds directly as root and allows you to skip the transfer to the root containers-storage.
+
+You can rebase to all the images that are in your containers-storage:
+
+```
+sudo podman image list --filter=label=containers.bootc=1
+```
+
+See [man bootc switch](https://bootc.dev/bootc/man/bootc-switch.8.html) for more info.
+
+```
+sudo bootc switch --transport containers-storage localhost/myimage:latest
+```
+
+and reboot your system!
 
 ## Building and Running Virtual Machines and ISOs
 

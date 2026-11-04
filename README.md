@@ -9,10 +9,12 @@ This is based on the ublue-os image template found at [https://github.com/ublue-
 This image is meant to be bazzite plus:
 - gparted
 - blivet-gui
-- coolercontrol
 - liquidctl
 - Docker
 - android-file-transfer
+- clamav
+- clamav-freshclam
+- toolbox (which was removed in bazzite 45)
 
 That's it for now.
 
