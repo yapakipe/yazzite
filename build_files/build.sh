@@ -68,13 +68,6 @@ install_fedora_packages() {
     install_packages_and_services "fedora" fedora_packages fedora_services
 }
 
-install_terra_packages() {
-    local terra_packages=("terra-release" "coolercontrol" "liquidctl")
-    local terra_services=("coolercontrold")
-    install_packages_enable_repo "terra" terra_packages
-    enable_services "terra" terra_services
-}
-
 install_docker_packages() {
     # Code copied from bazzite-dx's 20-install-apps.sh
 
@@ -130,7 +123,6 @@ echo
 #
 
 install_fedora_packages
-install_terra_packages
 install_docker_packages
 
 #

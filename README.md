@@ -9,7 +9,6 @@ This is based on the ublue-os image template found at [https://github.com/ublue-
 This image is meant to be bazzite plus:
 - gparted
 - blivet-gui
-- coolercontrol
 - liquidctl
 - Docker
 - android-file-transfer
