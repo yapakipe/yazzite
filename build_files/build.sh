@@ -90,10 +90,50 @@ install_docker_packages() {
 }
 
 #
+# List available repos - helps figuring out why things don't work during a build...
+#
+list_repos() {
+    echo
+    echo Repos short list:
+    dnf5 repo list
+    echo
+    echo Repos details:
+    dnf5 repo info
+    echo
+    echo Contents of /etc/yum.repos.d/:
+    ls -l /etc/yum.repos.d/
+    echo
+}
+
+add_fusion_repos() {
+    sudo dnf5 -y install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+    sudo dnf5 -y install rpmfusion-free-release-tainted
+}
+
+install_vlc_packages() {
+    sudo dnf5 -y install libbluray libaacs vlc ffmpeg vlc-plugins-base vlc-plugin-ffmpeg vlc-plugins-all libdvdcss vlc-plugins-extra
+
+    # Uninstall VLC flatpak if present
+    flatpak uninstall -y org.videolan.VLC || true
+}
+
+#
 # Copy the contents of system_files/ of the git repo to /
 #
 
 cp -avf "/ctx/system_files"/. /
+
+#
+# Setup repos
+#
+
+echo === Initial repos ===
+list_repos
+
+add_fusion_repos
+
+echo === Update repos ===
+list_repos
 
 #
 ### Install packages
@@ -104,26 +144,10 @@ cp -avf "/ctx/system_files"/. /
 # List of rpmfusion packages can be found here:
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/43/x86_64/repoview/index.html&protocol=https&redirect=1
 
-#
-# List available repos - helps figuring out why things don't work during a build...
-#
-
-echo
-echo Repos short list:
-dnf5 repo list
-echo
-echo Repos details:
-dnf5 repo info
-echo
-ls -l /etc/yum.repos.d/
-echo
-
-#
-# Install packages
-#
 
 install_fedora_packages
 install_docker_packages
+install_vlc_packages
 
 #
 # Use a COPR Example:
