@@ -106,12 +106,12 @@ list_repos() {
 }
 
 add_fusion_repos() {
-    sudo dnf5 -y install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
-    sudo dnf5 -y install rpmfusion-free-release-tainted
+    dnf5 -y install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+    dnf5 -y install rpmfusion-free-release-tainted
 }
 
 install_vlc_packages() {
-    sudo dnf5 -y install libbluray libaacs vlc ffmpeg vlc-plugins-base vlc-plugin-ffmpeg vlc-plugins-all libdvdcss vlc-plugins-extra
+    dnf5 -y install libbluray libaacs vlc ffmpeg vlc-plugins-base vlc-plugin-ffmpeg vlc-plugins-all libdvdcss vlc-plugins-extra
 
     # Uninstall VLC flatpak if present
     flatpak uninstall -y org.videolan.VLC || true
