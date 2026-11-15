@@ -117,6 +117,10 @@ install_vlc_packages() {
     flatpak uninstall -y org.videolan.VLC || true
 }
 
+install_tpm1_packages() {
+    dnf5 -y install clevis clevis-luks clevis-dracut clevis-udisks2 clevis-systemd clevis-pin-tpm1 trousers
+}
+
 #
 # Copy the contents of system_files/ of the git repo to /
 #
@@ -148,6 +152,7 @@ list_repos
 install_fedora_packages
 install_docker_packages
 install_vlc_packages
+install_tpm1_packages
 
 #
 # Use a COPR Example:
