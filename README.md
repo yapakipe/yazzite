@@ -16,6 +16,7 @@ This image is meant to be bazzite plus:
 - clamav-freshclam
 - toolbox (which was removed in bazzite 45)
 - VLC package (replacing flatpak) and dependencies needed to play DVDs and Blu-ray discs (libraries only, no keys)
+- Support for TPM 1.2, for automatically unlocking LUKS-encrypted root filesystem at boot (without asking for passphrase)
 
 That's it for now.
 
