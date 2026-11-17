@@ -105,20 +105,36 @@ list_repos() {
     echo
 }
 
+# add_terra_repo() {
+#     dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release terra-gpg-keys
+# }
+
 add_fusion_repos() {
     dnf5 -y install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
     dnf5 -y install rpmfusion-free-release-tainted
 }
 
+# install_terra_packages() {
+#     local terra_packages=("coolercontrol" "liquidctl")
+#     local terra_services=("coolercontrold")
+#     install_packages_enable_repo "terra" terra_packages
+#     enable_services "terra" terra_services
+# }
+
 install_vlc_packages() {
-    dnf5 -y install libbluray libaacs vlc ffmpeg vlc-plugins-base vlc-plugin-ffmpeg vlc-plugins-all libdvdcss vlc-plugins-extra
+    local fedora_packages=("ffmpeg" "libbluray" "libaacs" "vlc" "vlc-plugins-base" "vlc-plugin-ffmpeg" "vlc-plugins-all" "vlc-plugins-extra")
+    install_packages "fedora" fedora_packages
+
+    local rpmfusion_free_tainted_packages=("libdvdcss") 
+    install_packages "rpmfusion-free-tainted" rpmfusion_free_tainted_packages
 
     # Uninstall VLC flatpak if present
     flatpak uninstall -y org.videolan.VLC || true
 }
 
 install_tpm1_packages() {
-    dnf5 -y install clevis clevis-luks clevis-dracut clevis-udisks2 clevis-systemd clevis-pin-tpm1 trousers
+    local fedora_packages=("clevis" "clevis-luks" "clevis-dracut" "clevis-udisks2" "clevis-systemd" "clevis-pin-tpm1" "trousers")
+    install_packages "fedora" fedora_packages
 }
 
 #
@@ -134,9 +150,10 @@ cp -avf "/ctx/system_files"/. /
 echo === Initial repos ===
 list_repos
 
+#add_terra_repo
 add_fusion_repos
 
-echo === Update repos ===
+echo === Updated repos ===
 list_repos
 
 #
@@ -150,14 +167,8 @@ list_repos
 
 
 install_fedora_packages
+#install_terra_packages
 install_docker_packages
 install_vlc_packages
 install_tpm1_packages
 
-#
-# Use a COPR Example:
-#
-# dnf5 -y copr enable ublue-os/staging
-# dnf5 -y install package
-# Disable COPRs so they don't end up enabled on the final image:
-# dnf5 -y copr disable ublue-os/staging
