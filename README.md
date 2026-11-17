@@ -28,11 +28,29 @@ Pay special attention to the warning that says "Rebasing between different deskt
 
 This image is using KDE Plasma, so only rebase from/to other Fedora atomic images that also use KDE Plasma as their desktop environment.
 
+First you should probably pin your current image, so you can rollback to it if _this_ image isn't working on your system:
+
+```bash
+sudo ostree admin pin 0
+```
+
 To rebase to this image:
 
 ```bash
 rpm-ostree rebase  ostree-image-signed:docker://ghcr.io/yapakipe/yazzite:latest
 ```
+
+If you get an error like this:
+
+```error: Preparing import: Fetching manifest: containers-policy.json specifies a default of `insecureAcceptAnything`; refusing usage```
+
+You'll need to first rebase to the unsigned image:
+
+```bash
+rpm-ostree rebase ostree-unverified-registry:ghcr.io/yapakipe/yazzite:latest
+```
+
+And _then_ rebase to the signed image with the first rebase command above.
 
 To rebase back to bazzite or bazzite-dx, first check whether you have any layered packages that were installed on to of your current image:
 ```
