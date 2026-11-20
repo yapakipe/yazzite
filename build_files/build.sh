@@ -63,7 +63,7 @@ install_packages_and_services() {
 }
 
 install_fedora_packages() {
-    local fedora_packages=("gparted" "blivet-gui" "android-file-transfer" "clamav" "clamav-freshclam" "toolbox")
+    local fedora_packages=("gparted" "blivet-gui" "android-file-transfer" "clamav" "clamav-freshclam" "toolbox" "htop")
     local fedora_services=("podman.socket")
     install_packages_and_services "fedora" fedora_packages fedora_services
 }

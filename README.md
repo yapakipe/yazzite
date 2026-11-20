@@ -14,7 +14,8 @@ This image is meant to be bazzite plus:
 - clamav
 - clamav-freshclam
 - toolbox (which was removed in bazzite 45)
-- VLC package (replacing flatpak) and dependencies needed to play DVDs and Blu-ray discs (libraries only, no keys)
+- VLC package (replacing flatpak) and dependencies needed to play DVDs and Blu-ray discs (binaries only, no keys)
+- htop
 
 That's it for now.
 
